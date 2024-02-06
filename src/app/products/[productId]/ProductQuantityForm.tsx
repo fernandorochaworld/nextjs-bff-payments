@@ -10,6 +10,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import { Total } from "@nextjs-bff/components/Total";
+import { addToCartAction } from "@nextjs-bff/sever-actions/cart.actions";
 
 const schema = yup
     .object({
@@ -51,16 +52,7 @@ export function ProductQuantityForm(props: { product: Product }) {
         <Box
             component="form"
             sx={{ p: 1 }}
-            action={async (formData: FormData) => {
-                // const isValid = await trigger();
-                // if (!isValid) {
-                //     return;
-                // }
-                // const newFormData = new FormData();
-                // newFormData.append('quantity', formData.get('quantity') as string);
-                // newFormData.append('product_id', formData.get('product_id') as string);
-                // await addToCartAction(newFormData);
-            }}
+            action={addToCartAction}
         >
             <Box
                 sx={{

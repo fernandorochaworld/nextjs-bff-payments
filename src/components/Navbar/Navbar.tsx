@@ -6,8 +6,12 @@ import { SelectCategory } from "./SelectCategory";
 import Image from "next/legacy/image";
 import HomeIcon from "@mui/icons-material/Home";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { CategoryService } from "@nextjs-bff/services/category.service";
+import { AuthService } from "@nextjs-bff/services/auth.service";
 
 export async function Navbar() {
+    const categories = await new CategoryService().getCategorys();
+    const user = new AuthService().getUser();
     return (
         <AppBar position="fixed">
             <Toolbar sx={{ backgroundColor: "background.paper" }}>
@@ -24,7 +28,7 @@ export async function Navbar() {
                 <IconButton LinkComponent={Link} size="large" href="/my-cart">
                     <ShoppingCartIcon />
                 </IconButton>
-                <UserMenu user={null} />
+                <UserMenu user={user} />
             </Toolbar>
             <Toolbar
                 sx={{
@@ -33,7 +37,7 @@ export async function Navbar() {
                     alignContent: "center",
                     p: 1,
                 }}>
-                <SelectCategory categories={[]} />
+                <SelectCategory categories={categories} />
 
                 <Box
                     component={Link}

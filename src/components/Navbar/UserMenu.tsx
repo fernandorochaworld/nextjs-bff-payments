@@ -8,6 +8,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import Link from "next/link";
+import { logoutAction } from "@nextjs-bff/sever-actions/auth.action";
 
 export type UserMenuProps = {
     user: any | null;
@@ -27,7 +28,8 @@ export function UserMenu(props: UserMenuProps) {
     }
     
     const redirectToMyOrders = () => {
-        setAnchorEl(null);
+        handleClose();
+        router.push("/my-orders");
     };
     
     const handleClose = () => {
@@ -35,6 +37,7 @@ export function UserMenu(props: UserMenuProps) {
     };
     
     const hanldeLogout = async () => {
+        await logoutAction();
         handleClose();
     }
     

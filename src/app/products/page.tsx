@@ -5,14 +5,42 @@ import Link from "next/link";
 import Image from "next/legacy/image";
 import { Product } from "@nextjs-bff/models";
 
-async function getProducts(): Promise<Product[]> {
-    const response = await fetch(`http://localhost:8080/product`);
+async function getProducts({search, category_id}: { search?: string; category_id?: string}): Promise<Product[]> {
+    const urlSearchParams = new URLSearchParams();
+
+    if (search) {
+        urlSearchParams.append('search', search);
+    }
+
+    if (category_id) {
+        urlSearchParams.append('category_id', category_id);
+    }
+
+    let url = `${process.env.NEXT_API_URL}/products`;
+
+    if (urlSearchParams.toString()) {
+        url += `?${urlSearchParams.toString()}`;
+    }
+
+    const response = await fetch(url, {
+        next: {
+            revalidate: 60,
+        },
+    });
+
     return response.json();
 }
 
-async function ListProductsPage() {
 
-    const products = await getProducts();
+async function ListProductsPage({
+    searchParams
+}: { searchParams: { search: string, category_id: string } }) {
+
+    // const products = await new ProductService().getProducts({ search: searchParams.search, category_id: searchParams.category_id });
+    const products = await getProducts({
+        search: searchParams.search,
+        category_id: searchParams.category_id
+    });
 
     return (
         <Grid2 container spacing={2}>
@@ -24,7 +52,7 @@ async function ListProductsPage() {
             {products.map((product, key) => (
                 <Grid2 xs={12} sm={6} md={4} key={key} className={"product-item"}>
                     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                        
+
                         <Box
                             sx={{
                                 position: 'relative',
@@ -39,7 +67,7 @@ async function ListProductsPage() {
                                 layout="fill"
                                 objectFit="cover"
                                 priority
-                                />
+                            />
                         </Box>
 
                         <CardContent sx={{ flexGrow: 1 }}>

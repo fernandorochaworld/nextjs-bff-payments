@@ -2,6 +2,9 @@ import { Delete, ShoppingCart } from "@mui/icons-material";
 import { Avatar, Box, Button, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Total } from "@nextjs-bff/components/Total";
+import { CartServiceFactory } from "@nextjs-bff/services/cart.service";
+import { ProductService } from "@nextjs-bff/services/product.service";
+import { removeItemFromCartAction } from "@nextjs-bff/sever-actions/cart.actions";
 import Link from "next/link";
 import React from "react";
 
@@ -25,23 +28,29 @@ const products = [
     },
 ];
 
-const cart = {
-    items: [
-        {
-            product_id: '1',
-            quantity: 2,
-            total: 200,
-        },
-        {
-            product_id: '2',
-            quantity: 1,
-            total: 100,
-        },
-    ],
-    total: 1000,
-};
+// const cart = {
+//     items: [
+//         {
+//             product_id: '1',
+//             quantity: 2,
+//             total: 200,
+//         },
+//         {
+//             product_id: '2',
+//             quantity: 1,
+//             total: 100,
+//         },
+//     ],
+//     total: 1000,
+// };
+
 
 async function MyCartPage() {
+    const cart = CartServiceFactory.create().getCart();
+    const productService = new ProductService();
+    const products = await productService.getProductsByIds(
+        cart.items.map(item => item.product_id)
+    )
     return (
         <Box>
             <Typography variant="h3">
@@ -87,7 +96,7 @@ async function MyCartPage() {
                                     <ListItem
                                         sx={{ display: 'flex', justifyContent: 'end', p: 0 }}
                                     >
-                                        <form>
+                                        <form action={removeItemFromCartAction}>
                                             <input type="hidden" name="index" value={key} />
                                             <Button
                                                 color="error"

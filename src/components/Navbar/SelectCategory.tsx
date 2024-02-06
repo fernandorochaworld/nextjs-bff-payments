@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 // import { searchProducts } from "../../utils";
 // import { Category } from "../../models";
 import { Category } from "@nextjs-bff/models";
+import { searchProducts } from "@nextjs-bff/utils";
 
 
 export function SelectCategory({ categories }: { categories: Category[] }) {
@@ -20,8 +21,8 @@ export function SelectCategory({ categories }: { categories: Category[] }) {
                 sx={{ backgroundColor: grey[400]}}
                 onChange={event => {
                     const search = searchParams.get('search');
-                    const category_id = event.target.value;
-                    // searchProducts(router, search, category_id);
+                    const category_id = event.target.value as string;
+                    searchProducts(router, search, category_id);
                 }}
             >
                 <MenuItem value="0">All categories</MenuItem>

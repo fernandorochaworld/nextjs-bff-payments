@@ -3,18 +3,9 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import DescriptionIcon from "@mui/icons-material/Description";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import Image from "next/legacy/image";
-import { Product } from "@nextjs-bff/models";
 import { ProductQuantityForm } from "./ProductQuantityForm";
+import { ProductService } from "@nextjs-bff/services/product.service";
 
-
-const product: Product = {
-    id: '1',
-    name: 'Product 1',
-    description: 'Description product 1',
-    price: 100,
-    image_url: 'https://cdn.ttgtmedia.com/rms/onlineimages/hp_elitebook.jpg',
-    category_id: '1'
-};
 
 async function ProductDetailPage({
     params,
@@ -23,6 +14,7 @@ async function ProductDetailPage({
 }) {
     // const { getProduct } = new ProductService();
     // const procuct = await getProduct(params.productId);
+    const product = await new ProductService().getProduct(params.productId);
 
     return (
         <Grid2 container spacing={2}>

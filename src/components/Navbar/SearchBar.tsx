@@ -4,6 +4,7 @@ import { InputBase, styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { grey } from "@mui/material/colors";
 import { useRouter, useSearchParams } from "next/navigation";
+import { searchProducts } from "@nextjs-bff/utils";
 // import { searchProducts } from "../../utils";
 
 const Search = styled("div")(({theme}) => ({
@@ -38,7 +39,7 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     width: "100%",
     "& .MuiInputBase-input": {
         padding: theme.spacing(1,1,1,0),
-        paddingLeft: `calc(1en + ${theme.spacing(4)})`,
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         trasition: theme.transitions.create("width"),
         width: "100%",
     },
@@ -59,7 +60,7 @@ export function SearchBar() {
                     const formData = new FormData(event.target as HTMLFormElement);
                     const search = formData.get("search") as string;
                     const category_id = searchParams.get("category_id");
-                    // searchProducts(router, search, category_id);
+                    searchProducts(router, search, category_id);
                 }}
                 >
                     <StyledInputBase

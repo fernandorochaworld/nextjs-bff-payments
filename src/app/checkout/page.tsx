@@ -3,44 +3,17 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Total } from "@nextjs-bff/components/Total";
 import { redirect } from "next/navigation";
 import { CheckoutForm } from "./CheckoutForm";
+import { CartServiceFactory } from "@nextjs-bff/services/cart.service";
+import { ProductService } from "@nextjs-bff/services/product.service";
 
-
-const products = [
-    {
-        id: '1',
-        name: 'Product 1',
-        description: 'Description product 1',
-        price: 100,
-        image_url: 'https://cdn.ttgtmedia.com/rms/onlineimages/hp_elitebook.jpg',
-        category_id: '1'
-    },
-    {
-        id: '2',
-        name: 'Product 1',
-        description: 'Description product 1',
-        price: 100,
-        image_url: 'https://cdn.ttgtmedia.com/rms/onlineimages/hp_elitebook.jpg',
-        category_id: '1'
-    },
-];
-
-const cart = {
-    items: [
-        {
-            product_id: '1',
-            quantity: 2,
-            total: 200,
-        },
-        {
-            product_id: '2',
-            quantity: 1,
-            total: 100,
-        },
-    ],
-    total: 1000,
-};
 
 async function CheckoutPage() {
+    const cart = CartServiceFactory.create().getCart();
+    const productService = new ProductService();
+    const products = await productService.getProductsByIds(
+        cart.items.map(item => item.product_id)
+    );
+
     if (cart.items.length === 0) {
         return redirect('/my-cart');
     }
